@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 const companies = [
 {
 name: "Infosys",
@@ -19,6 +20,35 @@ type: "Corporate Hiring Infrastructure",
 ];
 
 export default function CompaniesPage() {
+const [query, setQuery] = useState("");
+const [result, setResult] = useState<any>(null);
+const [loading, setLoading] = useState(false);
+
+const verifyCompany = async () => {
+
+  if (!query.trim()) return;
+
+  try {
+
+    setLoading(true);
+
+    const response = await fetch(
+      `http://127.0.0.1:8000/api/check-company?company=${query}&domain=${query}&gst=${query}`
+    );
+
+    const data = await response.json();
+
+    setResult(data);
+
+  } catch (error) {
+
+    console.log(error);
+
+  } finally {
+
+    setLoading(false);
+  }
+};
 return ( <main className="relative min-h-screen overflow-hidden pt-36 text-white">
 {/* Ambient Glow */}
 <div
@@ -95,6 +125,8 @@ background:
       <div className="flex flex-col gap-4 md:flex-row">
         <input
           type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder="Enter company name, GST number, or hiring domain"
           className="
             flex-1
@@ -106,10 +138,11 @@ background:
 
             outline-none
             placeholder:text-white/20
-          "
-        />
+  "
+/>
 
         <button
+        onClick={verifyCompany}
           className="
             rounded-2xl
             bg-[var(--teal)]
@@ -124,11 +157,84 @@ background:
             hover:bg-[var(--teal-light)]
           "
         >
-          Verify Company
+          {loading ? "Verifying..." : "Verify Company"}
         </button>
       </div>
     </div>
+{result && (
+  <div
+    className="
+      mt-10
+      rounded-[32px]
+      border border-white/10
+      bg-[#071018]
+      p-8
+    "
+  >
+    <div className="flex items-center justify-between">
 
+      <h2 className="text-3xl font-semibold">
+        {result.status}
+      </h2>
+
+      <div
+        className={`
+          rounded-full px-4 py-2 text-sm font-medium
+
+          ${
+            result.risk_score >= 80
+              ? "bg-red-500/20 text-red-400"
+              : result.risk_score >= 30
+              ? "bg-yellow-500/20 text-yellow-300"
+              : "bg-green-500/20 text-green-400"
+          }
+        `}
+      >
+        Risk Score: {result.risk_score}
+      </div>
+    </div>
+
+    <p className="mt-6 text-white/60 leading-[1.8]">
+      {result.message}
+    </p>
+
+    {result.company && (
+      <div className="mt-8 grid gap-4 md:grid-cols-3">
+
+        <div className="rounded-2xl border border-white/10 p-4">
+          <p className="text-white/40 text-sm">
+            Company
+          </p>
+
+          <h3 className="mt-2 text-xl">
+            {result.company.name}
+          </h3>
+        </div>
+
+        <div className="rounded-2xl border border-white/10 p-4">
+          <p className="text-white/40 text-sm">
+            Domain
+          </p>
+
+          <h3 className="mt-2 text-xl">
+            {result.company.domain}
+          </h3>
+        </div>
+
+        <div className="rounded-2xl border border-white/10 p-4">
+          <p className="text-white/40 text-sm">
+            GST
+          </p>
+
+          <h3 className="mt-2 text-xl">
+            {result.company.gst}
+          </h3>
+        </div>
+
+      </div>
+    )}
+  </div>
+)}
     {/* Verified Companies */}
     <div className="mt-24">
       <div className="flex items-center justify-between">

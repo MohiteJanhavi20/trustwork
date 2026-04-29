@@ -49,21 +49,22 @@ fixed top-0 left-0 z-50 w-full transition-all duration-500
     <nav className="flex h-16 sm:h-20 items-center justify-between">
       {/* Logo */}
       {/* Logo */}
+{/* Logo */}
 <Link
   href="/"
-  className="flex items-center gap-3"
+  className="flex items-center"
 >
   <Image
     src="/logo.png"
     alt="TrustWork Logo"
-    width={45}
-    height={45}
-    className="object-contain"
+    width={110}
+    height={110}
+    priority
+    className="
+      object-contain
+      drop-shadow-[0_0_18px_rgba(43,191,179,0.45)]
+    "
   />
-
-  <span className="font-serif-display italic text-2xl tracking-tight">
-    Trust<span className="text-teal">Work</span>
-  </span>
 </Link>
 
       {/* Center Nav */}

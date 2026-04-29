@@ -376,7 +376,7 @@ opacity-20 blur-[120px]
 
           {/* Right Side */}
           <div className="space-y-6 lg:col-span-5">
-            {/* Recent Detection */}
+            {/* Fake recruiters using cloned company domains detected */}
             <div
               className="
             rounded-[32px]
@@ -398,13 +398,11 @@ opacity-20 blur-[120px]
               </span>
 
               <h3 className="mt-6 text-2xl leading-tight">
-                Fake Infosys onboarding portal detected.
+                Recent cybercrime reports identified scammers impersonating
               </h3>
 
               <p className="mt-5 leading-[1.9] text-white/55">
-                Community reports identified cloned onboarding workflows
-                requesting Aadhaar verification and payment for laptop
-                activation.
+                trusted companies through lookalike domains, fake onboarding portals, WhatsApp interviews, and verification fee scams targeting students and job seekers across India.
               </p>
             </div>
 

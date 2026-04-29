@@ -6,6 +6,7 @@ from modules import link_scanner
 from modules import template_detector
 from modules import image_forensics
 from modules import pgp_handler
+from modules import company_checker
 
 from score_engine import calculate_final_score
 
@@ -59,6 +60,12 @@ app.include_router(
     pgp_handler.router,
     prefix="/api",
     tags=["Whistleblower"]
+)
+
+app.include_router(
+    company_checker.router,
+    prefix="/api",
+    tags=["Company"]
 )
 
 # ---------------------------------------------------
