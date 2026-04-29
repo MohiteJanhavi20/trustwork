@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pymongo
+httpx
+python-whois
+exifread
+cryptography
+python-multipart
+python-dotenv
