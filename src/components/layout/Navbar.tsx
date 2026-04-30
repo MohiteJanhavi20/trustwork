@@ -47,8 +47,6 @@ fixed top-0 left-0 z-50 w-full transition-all duration-500
 >
   <Container>
     <nav className="flex h-16 sm:h-20 items-center justify-between">
-      {/* Logo */}
-      {/* Logo */}
 {/* Logo */}
 <Link
   href="/"
@@ -57,8 +55,8 @@ fixed top-0 left-0 z-50 w-full transition-all duration-500
   <Image
     src="/logo.png"
     alt="TrustWork Logo"
-    width={110}
-    height={110}
+    width={70}
+    height={60}
     priority
     className="
       object-contain

@@ -1,4 +1,5 @@
 import hashlib
+import io
 
 import exifread
 
@@ -7,12 +8,16 @@ from fastapi import APIRouter, UploadFile, File
 router = APIRouter()
 
 
+# ---------------------------------------------------
+# VERDICT ENGINE
+# ---------------------------------------------------
+
 def generate_verdict(score):
 
-    if score > 65:
+    if score >= 70:
         return "HIGH RISK"
 
-    elif score >= 31:
+    elif score >= 40:
         return "MEDIUM RISK"
 
     return "LOW RISK"
@@ -25,25 +30,33 @@ async def check_image(file: UploadFile = File(...)):
 
     flags = []
 
-    # Read file bytes
-    contents = await file.read()
+    # ---------------------------------------------------
+    # READ FILE
+    # ---------------------------------------------------
 
-    # ---------------------------------------------------
-    # FILE HASH
-    # ---------------------------------------------------
+    contents = await file.read()
 
     file_hash = hashlib.md5(contents).hexdigest()
 
     file_size_kb = round(len(contents) / 1024, 2)
 
+    # IMPORTANT:
+    # Use BytesIO because file.file pointer becomes unreliable
+    # after reading contents
+    image_stream = io.BytesIO(contents)
+
     # ---------------------------------------------------
-    # READ EXIF
+    # READ EXIF METADATA
     # ---------------------------------------------------
 
     tags = exifread.process_file(
-        file.file,
+        image_stream,
         details=False
     )
+
+    # ---------------------------------------------------
+    # DEFAULT METADATA
+    # ---------------------------------------------------
 
     metadata = {
         "file_hash": file_hash,
@@ -57,7 +70,7 @@ async def check_image(file: UploadFile = File(...)):
     }
 
     # ---------------------------------------------------
-    # CHECK 1 — NO EXIF
+    # CHECK 1 — NO EXIF DATA
     # ---------------------------------------------------
 
     if not tags:
@@ -65,13 +78,13 @@ async def check_image(file: UploadFile = File(...)):
         risk_score += 40
 
         flags.append(
-            "No EXIF metadata found — image may be edited or screenshotted"
+            "No EXIF metadata found — image may be screenshot, compressed, or edited"
         )
 
     else:
 
         # ---------------------------------------------------
-        # CHECK 2 — GPS
+        # CHECK 2 — GPS METADATA
         # ---------------------------------------------------
 
         gps_lat = tags.get("GPS GPSLatitude")
@@ -79,17 +92,17 @@ async def check_image(file: UploadFile = File(...)):
 
         if gps_lat or gps_long:
 
-            risk_score += 35
+            risk_score += 15
 
             flags.append(
-                "GPS coordinates embedded in image"
+                "GPS metadata present in image"
             )
 
             metadata["GPS_latitude"] = str(gps_lat)
             metadata["GPS_longitude"] = str(gps_long)
 
         # ---------------------------------------------------
-        # CHECK 3 — EDITING SOFTWARE
+        # CHECK 3 — EDITING SOFTWARE DETECTION
         # ---------------------------------------------------
 
         software = tags.get("Image Software")
@@ -110,7 +123,8 @@ async def check_image(file: UploadFile = File(...)):
                 "snapseed",
                 "picsart",
                 "illustrator",
-                "inkscape"
+                "inkscape",
+                "adobe"
             ]
 
             lower_software = software_name.lower()
@@ -122,13 +136,13 @@ async def check_image(file: UploadFile = File(...)):
                     risk_score += 35
 
                     flags.append(
-                        f"Image edited using {software_name}"
+                        f"Image editing software detected: {software_name}"
                     )
 
                     break
 
         # ---------------------------------------------------
-        # CHECK 4 — CAMERA INFO
+        # CHECK 4 — CAMERA INFORMATION
         # ---------------------------------------------------
 
         camera_make = tags.get("Image Make")
@@ -145,11 +159,11 @@ async def check_image(file: UploadFile = File(...)):
             risk_score += 20
 
             flags.append(
-                "No camera information found"
+                "No camera device information found"
             )
 
         # ---------------------------------------------------
-        # CHECK 5 — DATE
+        # CHECK 5 — ORIGINAL DATE
         # ---------------------------------------------------
 
         date_taken = tags.get("EXIF DateTimeOriginal")
@@ -163,19 +177,62 @@ async def check_image(file: UploadFile = File(...)):
             risk_score += 15
 
             flags.append(
-                "No original capture date found"
+                "Original image capture date not found"
             )
 
     # ---------------------------------------------------
-    # FINAL SCORE
+    # FILE SIZE HEURISTICS
+    # ---------------------------------------------------
+
+    if file_size_kb < 15:
+
+        risk_score += 10
+
+        flags.append(
+            "Highly compressed image detected"
+        )
+
+    # ---------------------------------------------------
+    # LIMIT SCORE
     # ---------------------------------------------------
 
     risk_score = min(risk_score, 100)
 
+    # ---------------------------------------------------
+    # FINAL VERDICT
+    # ---------------------------------------------------
+
     verdict = generate_verdict(risk_score)
+
+    # ---------------------------------------------------
+    # ENSURE MINIMUM FLAGS
+    # ---------------------------------------------------
+
+    if not flags:
+
+        flags.append(
+            "No major forensic manipulation indicators detected"
+        )
+
+    # ---------------------------------------------------
+    # STANDARDIZED RESPONSE
+    # ---------------------------------------------------
 
     return {
         "filename": file.filename,
+
+        # Frontend-compatible keys
+        "riskScore": risk_score,
+        "severity": (
+            "HIGH"
+            if risk_score >= 70
+            else "MEDIUM"
+            if risk_score >= 40
+            else "LOW"
+        ),
+        "issues": flags,
+
+        # Detailed response
         "risk_score": risk_score,
         "verdict": verdict,
         "flags": flags,
