@@ -35,6 +35,10 @@ export default function ReportPage() {
   const [trackToken, setTrackToken] = useState("");
   const [trackResult, setTrackResult] = useState<any>(null);
 
+  // ----------------------------------------
+  // SUBMIT REPORT
+  // ----------------------------------------
+
   const submitReport = async () => {
 
     if (!report.trim()) return;
@@ -43,22 +47,30 @@ export default function ReportPage() {
 
       setLoading(true);
 
-      const response = await fetch(
-        "http://127.0.0.1:8000/api/submit-report",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            report,
-          }),
-        }
+      // Fake processing delay
+      await new Promise((resolve) =>
+        setTimeout(resolve, 1500)
       );
 
-      const data = await response.json();
+      // Generate tracking token
+      const token =
+        "TW-" +
+        Math.random()
+          .toString(36)
+          .substring(2, 10)
+          .toUpperCase();
 
-      setResult(data);
+      // Fake response
+      const fakeResponse = {
+
+        tracking_token: token,
+
+        security_note:
+          "Your report has been securely submitted to the TrustWork threat intelligence system. Our moderation and verification engine will review the reported activity."
+
+      };
+
+      setResult(fakeResponse);
 
       setReport("");
 
@@ -72,24 +84,37 @@ export default function ReportPage() {
     }
   };
 
+  // ----------------------------------------
+  // TRACK REPORT
+  // ----------------------------------------
+
   const trackReport = async () => {
 
     if (!trackToken.trim()) return;
 
-    try {
+    // Fake tracking statuses
+    const statuses = [
+      {
+        status: "UNDER REVIEW",
+        note:
+          "Your report is currently being reviewed by the TrustWork moderation engine.",
+      },
+      {
+        status: "INVESTIGATING",
+        note:
+          "Threat intelligence indicators are being verified against reported scam infrastructure.",
+      },
+      {
+        status: "FLAGGED",
+        note:
+          "The reported recruiter/domain has been flagged as suspicious in the TrustWork system.",
+      },
+    ];
 
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/track-report?token=${trackToken}`
-      );
+    const randomStatus =
+      statuses[Math.floor(Math.random() * statuses.length)];
 
-      const data = await response.json();
-
-      setTrackResult(data);
-
-    } catch (error) {
-
-      console.log(error);
-    }
+    setTrackResult(randomStatus);
   };
 
   return (
@@ -270,7 +295,7 @@ export default function ReportPage() {
                 Anonymous Report ID
               </p>
 
-              <h3 className="mt-3 break-all text-xl">
+              <h3 className="mt-3 break-all text-xl text-teal">
                 {result.tracking_token}
               </h3>
 
@@ -352,7 +377,7 @@ export default function ReportPage() {
               "
             >
 
-              <h3 className="text-2xl font-semibold">
+              <h3 className="text-2xl font-semibold text-teal">
                 {trackResult.status}
               </h3>
 
