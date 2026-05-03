@@ -58,6 +58,7 @@ const createReport = async (req, res) => {
       scamType:    scamType.trim(),
       description: description.trim(),
       severity,
+      status: req.body.status || "UNDER REVIEW",
     });
 
     return res.status(201).json({

@@ -44,17 +44,23 @@ export default function WhistleblowerPage() {
               "application/json",
           },
 
-         body: JSON.stringify({
+          body: JSON.stringify({
 
-  company: "Unknown Company",
+            company:
+              "Unknown Company",
 
-  recruiter: "Anonymous Recruiter",
+            recruiter:
+              "Anonymous Recruiter",
 
-  scamType: incidentType,
+            scamType:
+              incidentType,
 
-  description,
+            description,
 
-}),
+            status:
+              "UNDER REVIEW",
+
+          }),
         }
       );
 
@@ -120,7 +126,7 @@ export default function WhistleblowerPage() {
             "
           >
             Securely report
-            <span className="font-serif-display italic text-teal">
+            <span className="text-teal">
               {" "}
               fraudulent
             </span>{" "}
@@ -293,36 +299,6 @@ export default function WhistleblowerPage() {
                       />
 
                     </div>
-
-                  </div>
-
-                  {/* Upload UI */}
-                  <div
-                    className="
-                      rounded-2xl
-                      border border-dashed border-white/10
-                      bg-white/[0.02]
-                      p-8
-                      text-center
-                    "
-                  >
-
-                    <p className="text-sm text-white/45">
-                      Upload screenshots, offer letters,
-                      recruiter chats, or evidence files
-                    </p>
-
-                    <button
-                      className="
-                        mt-5
-                        rounded-full
-                        border border-white/10
-                        px-5 py-2
-                        text-sm
-                      "
-                    >
-                      Upload Evidence
-                    </button>
 
                   </div>
 

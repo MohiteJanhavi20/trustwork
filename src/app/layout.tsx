@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const instrumentSerif = Instrument_Serif({
+const instrumentSerif = Geist({
   variable: "--font-instrument-serif",
   subsets: ["latin"],
   weight: "400",
