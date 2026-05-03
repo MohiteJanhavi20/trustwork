@@ -56,8 +56,8 @@ fixed top-0 left-0 z-50 w-full transition-all duration-500
   <Image
     src="/logo.png"
     alt="TrustWork Logo"
-    width={70}
-    height={60}
+    width={60}
+    height={55}
     priority
     className="
   h-auto
@@ -118,29 +118,23 @@ fixed top-0 left-0 z-50 w-full transition-all duration-500
           );
         })}
       </div>
-
       {/* CTA */}
       <Link
-        href="/verify"
-        className="
-          rounded-full
-          border border-[var(--teal)]/30
-          bg-[var(--teal)]/10
-
-          px-5 py-2.5
-
-          text-sm
-          font-medium
-          text-[var(--teal)]
-
-          transition-all duration-300
-
-          hover:bg-[var(--teal)]
-          hover:text-black
-        "
-      >
-        Verify Now
-      </Link>
+  href="/admin/login"
+  className="
+    mr-3
+    rounded-full
+    border border-white/10
+    px-5 py-2.5
+    text-sm
+    text-white/70
+    transition-all duration-300
+    hover:border-[var(--teal)]/30
+    hover:text-white
+  "
+>
+  Admin
+</Link>
     </nav>
   </Container>
 </header>

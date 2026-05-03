@@ -66,7 +66,20 @@ export default function LoginPage() {
         />
 
         <button
-          className="bg-black text-white p-2 w-full"
+          className="
+  w-full
+  rounded-1xl
+  bg-[var(--teal)]
+  px-6 py-4
+
+  text-sm
+  font-medium
+  text-black
+
+  transition-all duration-300
+
+  hover:bg-[var(--teal-light)]
+"
           onClick={handleLogin}
         >
           Login

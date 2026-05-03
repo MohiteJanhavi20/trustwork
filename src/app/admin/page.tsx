@@ -117,12 +117,16 @@ export default function AdminPage() {
         ? true
         : report.status === selectedStatus;
 
+    const searchableText = `
+      ${report.title || ""}
+      ${report.scamType || ""}
+      ${report.company || ""}
+    `.toLowerCase();
+
     const matchesSearch =
-      (report.scamType || "")
-  .toLowerCase()
-        .includes(
-          searchTerm.toLowerCase()
-        );
+      searchableText.includes(
+        searchTerm.toLowerCase()
+      );
 
     return (
       matchesStatus &&
@@ -401,8 +405,13 @@ export default function AdminPage() {
                         </span>
 
                         <h3 className="mt-3 text-2xl">
-                          {report.scamType}
-                        </h3>
+  {
+    report.title ||
+    report.scamType ||
+    report.company ||
+    "Unknown Threat"
+  }
+</h3>
 
                       </div>
 
@@ -712,7 +721,12 @@ export default function AdminPage() {
           </span>
 
           <h2 className="mt-4 text-4xl">
-            {selectedReport.scamType}
+            {
+  selectedReport.title ||
+  selectedReport.scamType ||
+  selectedReport.company ||
+  "Unknown Threat"
+}
           </h2>
 
         </div>
@@ -782,7 +796,7 @@ export default function AdminPage() {
           </p>
 
           <h3 className="mt-2 text-xl">
-            {selectedReport.reportedBy}
+            {selectedReport.reportedBy || selectedReport.recruiter}
           </h3>
 
         </div>

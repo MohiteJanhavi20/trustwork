@@ -28,10 +28,6 @@ const links = [
     label: "Whistleblower Vault",
     href: "/whistleblower",
   },
-  {
-    label: "Admin Dashboard",
-    href: "/admin",
-  },
 ];
 
 export default function Footer() {
