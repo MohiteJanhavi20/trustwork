@@ -148,7 +148,7 @@ export default function ReportPage() {
               text-teal
             "
           >
-            Community Intelligence Reports
+            Track Fraud Reports
           </span>
 
           <h1
@@ -160,7 +160,7 @@ export default function ReportPage() {
               md:text-[96px]
             "
           >
-            Crowdsourced fraud
+            Track fraud
             <span className="font-serif-display italic text-teal">
               {" "}
               intelligence
@@ -184,83 +184,7 @@ export default function ReportPage() {
           </p>
         </div>
 
-        {/* Submit Report */}
-        <div
-          className="
-            mt-20
-            rounded-[36px]
-            border border-white/10
-            bg-white/[0.03]
-            p-8
-            shadow-[0_0_40px_rgba(0,0,0,0.15)]
-          "
-        >
-
-          <div className="flex flex-col gap-6">
-
-            <div>
-
-              <span
-                className="
-                  text-[11px]
-                  uppercase
-                  tracking-[0.25em]
-                  text-white/35
-                "
-              >
-                Submit Intelligence
-              </span>
-
-              <h2 className="mt-5 text-3xl leading-tight">
-                Report suspicious recruiters, domains,
-                or onboarding scams.
-              </h2>
-
-            </div>
-
-            <textarea
-              value={report}
-              onChange={(e) => setReport(e.target.value)}
-              placeholder="Describe the scam, recruiter behavior, payment request, or suspicious activity..."
-              className="
-                min-h-[180px]
-                rounded-[28px]
-                border border-white/10
-                bg-black/20
-
-                px-6 py-5
-
-                outline-none
-                resize-none
-
-                placeholder:text-white/20
-              "
-            />
-
-            <button
-              onClick={submitReport}
-              className="
-                w-fit
-                rounded-full
-                bg-[var(--teal)]
-
-                px-8 py-4
-
-                text-sm
-                font-medium
-                text-black
-
-                transition-all duration-300
-                hover:bg-[var(--teal-light)]
-              "
-            >
-              {loading ? "Encrypting..." : "Submit Scam Report"}
-            </button>
-
-          </div>
-        </div>
-
-        {/* Submission Result */}
+       
         {result && (
 
           <div

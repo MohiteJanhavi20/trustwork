@@ -1,38 +1,23 @@
 const mongoose = require("mongoose");
 
 const reportSchema = new mongoose.Schema(
-{
-company: {
-type: String,
-required: true,
-},
-recruiter: {
-  type: String,
-  required: true,
-},
-
-scamType: {
-  type: String,
-  required: true,
-},
-
-description: {
-  type: String,
-  required: true,
-},
-
-severity: {
-  type: String,
-  default: "MEDIUM",
-},
-
-},
-{
-timestamps: true,
-}
+  {
+    title: String,
+    description: String,
+    company: String,
+    phone: String,
+    severity: {
+      type: String,
+      enum: ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+    },
+    status: {
+      type: String,
+      default: "PENDING",
+    },
+    screenshot: String,
+    reportedBy: String,
+  },
+  { timestamps: true }
 );
 
-module.exports = mongoose.model(
-"Report",
-reportSchema
-);
+module.exports = mongoose.model("Report", reportSchema);

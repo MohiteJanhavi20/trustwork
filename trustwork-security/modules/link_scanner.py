@@ -119,7 +119,7 @@ async def check_link(url: str):
         "easymoney",
         "jobs4free",
         "ghar-baithe",
-        "naukri-free"
+        "naukrifree.com"
     ]
 
     lower_url = url.lower()

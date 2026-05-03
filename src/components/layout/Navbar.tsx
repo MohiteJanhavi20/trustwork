@@ -10,7 +10,8 @@ import Container from "@/components/layout/Container";
 const links = [
 { href: "/", label: "Home" },
 { href: "/verify", label: "Verify" },
-{ href: "/report", label: "Report" },
+{ href: "/whistleblower", label: "Report" },
+{ href: "/report", label: "Track" },
 { href: "/companies", label: "Companies" },
 { href: "/threat-intel", label: "Threat Intel" },
 { href: "/about", label: "About" },
@@ -59,9 +60,10 @@ fixed top-0 left-0 z-50 w-full transition-all duration-500
     height={60}
     priority
     className="
-      object-contain
-      drop-shadow-[0_0_18px_rgba(43,191,179,0.45)]
-    "
+  h-auto
+  object-contain
+  drop-shadow-[0_0_18px_rgba(43,191,179,0.45)]
+"
   />
 </Link>
 
